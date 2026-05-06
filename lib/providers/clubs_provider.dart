@@ -1,16 +1,74 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/club.dart';
 import '../models/event.dart';
 
 final clubsProvider = FutureProvider<List<Club>>((ref) async {
-  final data = await Supabase.instance.client.from('clubs').select();
-  return data.map((json) => Club.fromJson(json)).toList();
+  // Commenting out Supabase query to bypass permission errors
+  // final data = await Supabase.instance.client.from('clubs').select();
+  // return data.map((json) => Club.fromJson(json)).toList();
+
+  return [
+    Club(
+      id: '1',
+      name: 'NUST Tech Wizards',
+      category: 'Technology',
+      description: 'For all programming and tech enthusiasts.',
+      logoEmoji: '💻',
+      memberCount: 120,
+      leaderName: 'John Doe',
+      leaderTitle: 'President',
+      isFeatured: true,
+    ),
+    Club(
+      id: '2',
+      name: 'Campus Rovers FC',
+      category: 'Sports',
+      description: 'The official soccer club on campus.',
+      logoEmoji: '⚽',
+      memberCount: 45,
+      leaderName: 'Mike Smith',
+      leaderTitle: 'Captain',
+      isFeatured: true,
+    ),
+    Club(
+      id: '3',
+      name: 'Art Society',
+      category: 'Arts',
+      description: 'Expressing creativity through drawing and painting.',
+      logoEmoji: '🎨',
+      memberCount: 80,
+      leaderName: 'Jane Doe',
+      leaderTitle: 'President',
+      isFeatured: false,
+    ),
+  ];
 });
 
 final eventsProvider = FutureProvider<List<ClubEvent>>((ref) async {
-  final data = await Supabase.instance.client.from('events').select();
-  return data.map((json) => ClubEvent.fromJson(json)).toList();
+  // Commenting out Supabase query to bypass permission errors
+  // final data = await Supabase.instance.client.from('events').select();
+  // return data.map((json) => ClubEvent.fromJson(json)).toList();
+
+  return [
+    ClubEvent(
+      id: '101',
+      clubId: '1',
+      title: 'Hackathon 2026',
+      date: 'Aug 15',
+      time: '09:00 AM',
+      location: 'Computer Science Lab',
+      description: 'Annual 24-hour hackathon.',
+    ),
+    ClubEvent(
+      id: '102',
+      clubId: '2',
+      title: 'Inter-Faculty Tournament',
+      date: 'Aug 20',
+      time: '02:00 PM',
+      location: 'Main Stadium',
+      description: 'Annual soccer tournament.',
+    ),
+  ];
 });
 
 class MembershipNotifier extends StateNotifier<Set<String>> {

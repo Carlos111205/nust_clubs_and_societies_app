@@ -42,6 +42,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
       );
+    } else if (mounted) {
+      // Upon successful login, we must pop any overlapping routes
+      // so the root AuthGate (which will switch to DashboardScreen) is visible.
+      Navigator.of(context).popUntil((route) => route.isFirst);
     }
   }
 

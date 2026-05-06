@@ -1,13 +1,56 @@
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 
-// In-memory "database" of registered users (mock)
+// In-memory "database" of registered users (mock), now synchronized with SharedPreferences
 final _registeredUsers = <String, _RegisteredUser>{};
+bool _isInitialized = false;
+
+Future<void> _initPrefs() async {
+  if (_isInitialized) return;
+  final prefs = await SharedPreferences.getInstance();
+  final usersStr = prefs.getString('registered_users');
+  if (usersStr != null) {
+    try {
+      final Map<String, dynamic> decoded = jsonDecode(usersStr);
+      decoded.forEach((key, value) {
+        _registeredUsers[key] = _RegisteredUser.fromMap(value);
+      });
+    } catch (e) {
+      print('Error loading users: $e');
+    }
+  }
+  _isInitialized = true;
+}
+
+Future<void> _savePrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  final Map<String, dynamic> encoded = {};
+  _registeredUsers.forEach((key, value) {
+    encoded[key] = value.toMap();
+  });
+  await prefs.setString('registered_users', jsonEncode(encoded));
+}
 
 class _RegisteredUser {
   final AppUser user;
   final String password;
   _RegisteredUser(this.user, this.password);
+
+  factory _RegisteredUser.fromMap(Map<String, dynamic> map) {
+    return _RegisteredUser(
+      AppUser.fromMap(map['user']),
+      map['password'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user': user.toMap(),
+      'password': password,
+    };
+  }
 }
 
 class AuthState {
@@ -42,7 +85,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      await Future.delayed(const Duration(milliseconds: 800));
+      await _initPrefs();
+      await Future.delayed(const Duration(milliseconds: 400));
 
       if (fullName.trim().length < 3) throw 'Please enter your full name.';
 
@@ -69,6 +113,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
 
       _registeredUsers[key] = _RegisteredUser(user, password);
+      await _savePrefs();
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
@@ -79,7 +124,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      await Future.delayed(const Duration(milliseconds: 800));
+      await _initPrefs();
+      await Future.delayed(const Duration(milliseconds: 400));
 
       if (!RegExp(r'^[Nn][0-9]+[A-Za-z]?[0-9]*$').hasMatch(studentId)) {
         throw 'Invalid Student ID format.';
