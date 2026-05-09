@@ -337,3 +337,19 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER tr_check_event_capacity
 BEFORE INSERT ON public.event_registrations
 FOR EACH ROW EXECUTE FUNCTION public.check_event_capacity();
+
+-- A view for the Ministry to see which clubs are most active
+CREATE OR REPLACE VIEW public.ministry_club_stats AS
+SELECT 
+    c.name,
+    c.category,
+    c.members_count,
+    (SELECT COUNT(*) FROM public.club_events WHERE club_id = c.id) as total_events,
+    (SELECT COUNT(*) FROM public.club_updates WHERE club_id = c.id) as total_updates
+FROM public.clubs c
+ORDER BY c.members_count DESC;
+
+-- Grant access to Ministry only
+ALTER VIEW public.ministry_club_stats OWNER TO postgres;
+GRANT SELECT ON public.ministry_club_stats TO authenticated; 
+-- (Filtered more in the RLS or API layer)
