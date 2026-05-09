@@ -255,9 +255,22 @@ CREATE TRIGGER on_clubs_updated
   FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
 -- Profile creation on signup
+-- Update this function in setup.sql
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  access_code TEXT;
 BEGIN
+  -- Get the code from metadata
+  access_code := new.raw_user_meta_data->>'ministry_access_code';
+
+  -- Security Logic: Only allow 'ministry' role if code matches
+  IF (new.raw_user_meta_data->>'role' = 'ministry') THEN
+    IF (access_code != 'NUST_ADMIN_2026') THEN -- Replace with your actual secret
+      RAISE EXCEPTION 'Invalid Ministry Access Code';
+    END IF;
+  END IF;
+
   INSERT INTO public.user_profiles (id, email, full_name, avatar_color, role, student_id)
   VALUES (
     new.id, 
