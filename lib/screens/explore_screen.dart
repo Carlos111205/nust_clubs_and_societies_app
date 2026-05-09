@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/clubs_provider.dart';
+import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/club_card.dart';
 import '../widgets/featured_club_card.dart';
@@ -12,6 +13,8 @@ class ExploreScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final userName = authState.user?.fullName.split(' ').first ?? 'User';
     final clubs = ref.watch(filteredClubsProvider);
     final featuredClubs = ref
         .watch(clubsProvider)
@@ -46,7 +49,7 @@ class ExploreScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Good morning, Tafara 👋',
+                    'Good morning, $userName 👋',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: 14,
@@ -154,13 +157,6 @@ class ExploreScreen extends ConsumerWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: AppTheme.primaryColor,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'See all →',
-                            style: TextStyle(color: Colors.orange),
                           ),
                         ),
                       ],

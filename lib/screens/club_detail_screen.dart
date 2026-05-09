@@ -191,11 +191,6 @@ class ClubDetailScreen extends ConsumerWidget {
                             ),
                           ],
                         ),
-                        const Spacer(),
-                        IconButton(
-                          icon: const Icon(LucideIcons.messageSquare, color: Colors.orange, size: 20),
-                          onPressed: () {},
-                        ),
                       ],
                     ),
                   ),

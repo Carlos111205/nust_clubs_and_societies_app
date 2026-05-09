@@ -69,20 +69,6 @@ class ProfileScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildStatItem('Clubs', joinedCount.toString()),
-                      Container(
-                        height: 30,
-                        width: 1,
-                        color: Colors.white.withOpacity(0.2),
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                      ),
-                      _buildStatItem('Events', '12'),
-                      Container(
-                        height: 30,
-                        width: 1,
-                        color: Colors.white.withOpacity(0.2),
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                      ),
-                      _buildStatItem('Points', '450'),
                     ],
                   ),
                 ],
@@ -156,6 +142,25 @@ class ProfileScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.7)),
+        ),
+      ],
     );
   }
 

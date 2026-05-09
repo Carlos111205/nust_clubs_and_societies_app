@@ -35,7 +35,7 @@ class EventTile extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  event.date.split(' ')[1],
+                  _getDateDay(event.date),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -43,7 +43,7 @@ class EventTile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  event.date.split(' ')[0].toUpperCase(),
+                  _getDateMonth(event.date),
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.orange,
@@ -96,5 +96,15 @@ class EventTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getDateDay(String date) {
+    final parts = date.split(' ');
+    return parts.length > 1 ? parts[1] : '—';
+  }
+
+  String _getDateMonth(String date) {
+    final parts = date.split(' ');
+    return parts.isNotEmpty ? parts[0].toUpperCase() : '—';
   }
 }
