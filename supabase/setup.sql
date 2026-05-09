@@ -316,3 +316,24 @@ DROP TRIGGER IF EXISTS on_membership_change ON public.club_memberships;
 CREATE TRIGGER on_membership_change
   AFTER INSERT OR UPDATE OR DELETE ON public.club_memberships
   FOR EACH ROW EXECUTE FUNCTION public.update_club_members_count();
+
+CREATE OR REPLACE FUNCTION public.check_event_capacity()
+RETURNS TRIGGER AS $$
+DECLARE
+  current_count INTEGER;
+  max_cap INTEGER;
+BEGIN
+  SELECT COUNT(*) INTO current_count FROM public.event_registrations WHERE event_id = NEW.event_id;
+  SELECT max_attendees INTO max_cap FROM public.club_events WHERE id = NEW.event_id;
+
+  IF (max_cap > 0 AND current_count >= max_cap) THEN
+    RAISE EXCEPTION 'This event is already full.';
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tr_check_event_capacity
+BEFORE INSERT ON public.event_registrations
+FOR EACH ROW EXECUTE FUNCTION public.check_event_capacity();
