@@ -34,6 +34,7 @@ class ClubCard extends ConsumerWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(15),
+        hoverColor: AppTheme.primaryColor.withOpacity(0.05),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
@@ -87,6 +88,7 @@ class ClubCard extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  overlayColor: AppTheme.primaryColor.withOpacity(0.1),
                 ),
                 child: Text(
                   isJoined ? 'Joined' : 'Join',

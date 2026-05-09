@@ -40,6 +40,16 @@ class CommunityScreen extends StatelessWidget {
             ],
           ),
         ),
+<<<<<<< Updated upstream
+=======
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.moreVertical, color: AppTheme.primaryColor),
+            onPressed: () {},
+            hoverColor: AppTheme.primaryColor.withOpacity(0.1),
+          ),
+        ],
+>>>>>>> Stashed changes
       ),
     );
   }

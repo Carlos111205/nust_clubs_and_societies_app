@@ -37,6 +37,7 @@ class FeaturedClubCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
+        hoverColor: Colors.white.withOpacity(0.1),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

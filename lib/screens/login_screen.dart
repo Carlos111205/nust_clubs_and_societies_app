@@ -83,6 +83,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         color: Colors.white.withValues(alpha: 0.15),
                         shape: BoxShape.circle,
                       ),
+<<<<<<< Updated upstream
                       child: const Text('🏛️', style: TextStyle(fontSize: 44)),
                     ),
                     const SizedBox(height: 14),
@@ -93,6 +94,81 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 0.5,
+=======
+                      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                      hoverColor: Colors.grey.shade200,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.grey.shade200),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.grey.shade200),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your national ID';
+                    }
+                    if (!RegExp(r'^[0-9]{2}-[0-9]{6,7}[A-Za-z][0-9]{2}$').hasMatch(value)) {
+                      return 'Enter a valid Zimbabwe National ID';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 32),
+                // Login Button
+                ElevatedButton(
+                  onPressed: authState.isLoading ? null : _handleLogin,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 0,
+                    overlayColor: Colors.white.withOpacity(0.2),
+                  ),
+                  child: authState.isLoading
+                      ? const SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'Sign In',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                ),
+                const SizedBox(height: 24),
+                // Security Note
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.blue.shade100),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(LucideIcons.shieldCheck, size: 20, color: Colors.blue.shade700),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Text(
+                          'Your data is protected by the NUST secure student portal system.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.blue,
+                          ),
+                        ),
+>>>>>>> Stashed changes
                       ),
                     ),
                     const SizedBox(height: 4),
