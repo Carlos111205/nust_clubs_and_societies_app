@@ -65,3 +65,17 @@ WHERE short_name = 'NAC';
 
 -- To make yourself a Club President:
 -- UPDATE public.user_profiles SET role = 'club_president', club_id = (SELECT id FROM public.clubs WHERE short_name = 'NAC' LIMIT 1) WHERE email = 'your-email@example.com';
+
+-- 5. Set up a test President for NAC
+UPDATE public.clubs 
+SET president_id = (SELECT id FROM public.user_profiles WHERE role = 'club_president' LIMIT 1)
+WHERE short_name = 'NAC';
+
+-- 6. Add some "Approved" members so the members_count trigger actually fires
+INSERT INTO public.club_memberships (club_id, user_id, status)
+SELECT 
+  (SELECT id FROM public.clubs WHERE short_name = 'NAC'),
+  id,
+  'approved'
+FROM public.user_profiles 
+LIMIT 5;
